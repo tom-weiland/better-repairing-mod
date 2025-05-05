@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "betterrepairing",
+	"version": "${version}",
+	"name": "Better Repairing",
+	"description": "Reworks the anvil repair mechanic to make it fun and relevant.",
+	"authors": [
+		"Tom Weiland"
+	],
+	"contact": {
+		"homepage": "https://tomweiland.net/",
+		"sources": ""
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/betterrepairing/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.tomweiland.betterrepairing.BetterRepairing"
+		],
+		"fabric-datagen": [
+			"net.tomweiland.betterrepairing.BetterRepairingDataGenerator"
+		],
+		"client": [
+			"net.tomweiland.betterrepairing.BetterRepairingClient"
+		]
+	},
+	"mixins": [
+		"betterrepairing.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
