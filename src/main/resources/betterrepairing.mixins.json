@@ -3,7 +3,9 @@
 	"package": "net.tomweiland.betterrepairing.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"AnvilScreenMixin",
+		"AnvilScreenHandlerMixin",
+		"ExperienceOrbEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

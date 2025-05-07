@@ -11,9 +11,11 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.ForgingScreenHandler;
@@ -22,10 +24,12 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
-import net.minecraft.util.math.MathHelper;
 
 @Mixin(AnvilScreenHandler.class)
 public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
+
+	private static final int baseRepairCost = 2;
+	private static final int baseEnchantCost = 3;
 
     @Shadow
     private Property levelCost;
@@ -54,30 +58,33 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		this.keepSecondSlot = false;
 		this.levelCost.set(1);
 		int cost = 0; // Formerly: i
-		long repairCost = 0L; // Formerly: l
 		int renameCost = 0;
+		int totalNewEnchantLvls = 0;
+
 		if (!itemInput1.isEmpty() && EnchantmentHelper.canHaveEnchantments(itemInput1)) {
 			ItemStack itemOuput = itemInput1.copy(); // Formerly: itemStack2
 			ItemStack itemInput2 = this.input.getStack(1); // Formerly: itemStack3
 			ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(itemOuput));
-			repairCost += (long)itemInput1.getOrDefault(DataComponentTypes.REPAIR_COST, 0).intValue() + itemInput2.getOrDefault(DataComponentTypes.REPAIR_COST, 0).intValue();
 			this.repairItemUsage = 0;
 			if (!itemInput2.isEmpty()) {
+				boolean item1HasMending = hasEnchantment(itemInput1, Enchantments.MENDING);
 				boolean hasEnchants = itemInput2.contains(DataComponentTypes.STORED_ENCHANTMENTS); // Formerly: bl
 				if (itemOuput.isDamageable() && itemInput1.canRepairWith(itemInput2)) {
-					int maxDmgRepair = Math.min(itemOuput.getDamage(), itemOuput.getMaxDamage() / 4); // Formerly: k
-					if (maxDmgRepair <= 0) {
+					int maxDamageRepair = itemOuput.getMaxDamage() / (item1HasMending ? 2 : 4); // Tools with mending require half the resources to be repaired fully
+					int dmgRepair = Math.min(itemOuput.getDamage(), maxDamageRepair); // Formerly: k
+					if (dmgRepair <= 0) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
 						return;
 					}
 
 					int repairItemsUsed; // Formerly: m
-					for (repairItemsUsed = 0; maxDmgRepair > 0 && repairItemsUsed < itemInput2.getCount(); repairItemsUsed++) {
-						int n = itemOuput.getDamage() - maxDmgRepair;
+					int repairItemUseCost = baseRepairCost + (item1HasMending ? 0 : 2);
+					for (repairItemsUsed = 0; dmgRepair > 0 && repairItemsUsed < itemInput2.getCount(); repairItemsUsed++) {
+						int n = itemOuput.getDamage() - dmgRepair;
 						itemOuput.setDamage(n);
-						cost++;
-						maxDmgRepair = Math.min(itemOuput.getDamage(), itemOuput.getMaxDamage() / 4);
+						cost += repairItemUseCost;
+						dmgRepair = Math.min(itemOuput.getDamage(), maxDamageRepair);
 					}
 
 					this.repairItemUsage = repairItemsUsed;
@@ -100,7 +107,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
 						if (itemOutputDmg < itemOuput.getDamage()) {
 							itemOuput.setDamage(itemOutputDmg);
-							cost += 2;
+							cost += baseRepairCost + 2;
 						}
 					}
 
@@ -122,12 +129,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 						for (RegistryEntry<Enchantment> registryEntry2 : builder.getEnchantments()) {
 							if (!registryEntry2.equals(registryEntry) && !Enchantment.canBeCombined(registryEntry, registryEntry2)) {
 								isAcceptableEnchant = false;
-								cost++;
 							}
 						}
-
+						
 						if (!isAcceptableEnchant) {
 							hasUnacceptableEnchant = true;
+							cost++;
 						} else {
 							hasAcceptableEnchant = true;
 							if (item2EnchantLvl > enchantment.getMaxLevel()) {
@@ -135,24 +142,21 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 							}
 
 							builder.set(registryEntry, item2EnchantLvl);
-							int enchantAnvilCost = enchantment.getAnvilCost(); // Formerly: s
-							if (hasEnchants) {
-								enchantAnvilCost = Math.max(1, enchantAnvilCost / 2);
-							}
-
-							cost += enchantAnvilCost * item2EnchantLvl;
-							if (itemInput1.getCount() > 1) {
-								cost = 40;
-							}
+							totalNewEnchantLvls += item2EnchantLvl;
 						}
 					}
-
+					
 					if (hasUnacceptableEnchant && !hasAcceptableEnchant) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
 						return;
 					}
 				}
+			}
+
+			cost += totalNewEnchantLvls;
+			if (totalNewEnchantLvls > 0) {
+				cost += baseEnchantCost;
 			}
 
 			if (this.newItemName != null && !StringHelper.isBlank(this.newItemName)) {
@@ -166,9 +170,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 				cost += renameCost;
 				itemOuput.remove(DataComponentTypes.CUSTOM_NAME);
 			}
-
-			int t = cost <= 0 ? 0 : (int)MathHelper.clamp(repairCost + cost, 0L, 2147483647L);
-			this.levelCost.set(t);
+			
+			this.levelCost.set(cost <= 0 ? 0 : cost);
 			if (cost <= 0) {
 				itemOuput = ItemStack.EMPTY;
 			}
@@ -181,22 +184,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 				this.keepSecondSlot = true;
 			}
 
-			if (this.levelCost.get() >= 40 && !this.player.getAbilities().creativeMode) {
-				itemOuput = ItemStack.EMPTY;
-			}
-
 			if (!itemOuput.isEmpty()) {
-				int outputCost = itemOuput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
-				if (outputCost < itemInput2.getOrDefault(DataComponentTypes.REPAIR_COST, 0)) {
-					outputCost = itemInput2.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
-				}
-
-				if (renameCost != cost || renameCost == 0) {
-					outputCost = getNextCost(outputCost);
-				}
-
-				itemOuput.set(DataComponentTypes.REPAIR_COST, outputCost);
+				int totalEnchantLvls = itemOuput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
+				itemOuput.set(DataComponentTypes.REPAIR_COST, totalEnchantLvls + totalNewEnchantLvls);
 				EnchantmentHelper.set(itemOuput, builder.build());
+				int enchantLvlTax = this.repairItemUsage > 0 ? totalEnchantLvls * this.repairItemUsage / 2 : totalEnchantLvls;
+				this.levelCost.set(cost + enchantLvlTax); // totalNewEnchantLvls is already added to cost earlier
 			}
 
 			this.output.setStack(0, itemOuput);
@@ -208,4 +201,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         ci.cancel();
     }
+
+	private static boolean hasEnchantment(ItemStack stack, RegistryKey<Enchantment> enchantment) {
+		// I despise this with a BURNING PASSION, it's so disgusting but I cannot for the life of me figure out how to
+		// determine if an item stack has a given enchantment other than this. The internet is useless. The AIs are
+		// hallucinating. I've landed on the same Reddit thread like 5 times during my scouring of online resources. It's
+		// insane that there does not appear to be a better solution than this, but if it exists I can't freaking find it.
+		return stack.getEnchantments().getEnchantments().toString().contains(enchantment.getValue().toString());
+	}
 }
