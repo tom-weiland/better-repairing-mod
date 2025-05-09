@@ -67,11 +67,24 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(itemOutput));
 			boolean item1HasMending = hasEnchantment(itemOutput, Enchantments.MENDING);
 			this.repairItemUsage = 0;
+			
 			if (!itemInput2.isEmpty()) {
-				boolean hasEnchants = itemInput2.contains(DataComponentTypes.STORED_ENCHANTMENTS); // Formerly: bl
-				if (itemOutput.isDamageable() && itemInput1.canRepairWith(itemInput2)) {
-					int maxDamageRepair = itemOutput.getMaxDamage() / (item1HasMending ? 2 : 4); // Tools with mending require half the resources to be repaired fully
-					int dmgRepair = Math.min(itemOutput.getDamage(), maxDamageRepair); // Formerly: k
+				boolean item2HasEnchants = itemInput2.contains(DataComponentTypes.STORED_ENCHANTMENTS); // Formerly: bl
+				
+				boolean item1IsNetherite = itemInput1.canRepairWith(new ItemStack(Items.NETHERITE_INGOT));
+				boolean item2IsDiamond = itemInput2.isOf(Items.DIAMOND);
+				boolean isRepairingNetheriteWithDiamond = item1IsNetherite && item1HasMending && item2IsDiamond; // Allow netherite items with mending to be repaired with diamonds
+
+				if (itemOutput.isDamageable() && (itemInput1.canRepairWith(itemInput2) || isRepairingNetheriteWithDiamond)) {
+					int numRepairsForMaxDmg = 4;
+					boolean item2IsNetherite = itemInput2.isOf(Items.NETHERITE_INGOT);
+					if (item2IsNetherite) {
+						numRepairsForMaxDmg = 1; // Only require 1 netherite ingot to fully repair a netherite tool
+					} else if (item1HasMending && !isRepairingNetheriteWithDiamond) {
+						numRepairsForMaxDmg = 2; // Mending resource discount doesn't apply when using diamonds to repair netherite gear
+					}
+					int maxDmgRepair = itemOutput.getMaxDamage() / numRepairsForMaxDmg;
+					int dmgRepair = Math.min(itemOutput.getDamage(), maxDmgRepair); // Formerly: k
 					if (dmgRepair <= 0) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
@@ -79,23 +92,31 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					}
 
 					int repairItemsUsed; // Formerly: m
-					int repairItemUseCost = baseRepairCost + (item1HasMending ? 0 : 2);
+					int unitRepairCost = baseRepairCost;
+					if (!item2IsNetherite) {
+						// Exempt repairing with netherite ingots from any level cost increases, even if the item doesn't have mending
+						if (isRepairingNetheriteWithDiamond) {
+							unitRepairCost += 4; // Mending level discount doesn't apply when using diamonds to repair netherite gear, in fact it should cost slightly more
+						} else if (!item1HasMending) {
+							unitRepairCost += 3;
+						}
+					}
 					for (repairItemsUsed = 0; dmgRepair > 0 && repairItemsUsed < itemInput2.getCount(); repairItemsUsed++) {
 						int n = itemOutput.getDamage() - dmgRepair;
 						itemOutput.setDamage(n);
-						cost += repairItemUseCost;
-						dmgRepair = Math.min(itemOutput.getDamage(), maxDamageRepair);
+						cost += unitRepairCost;
+						dmgRepair = Math.min(itemOutput.getDamage(), maxDmgRepair);
 					}
 
 					this.repairItemUsage = repairItemsUsed;
 				} else {
-					if (!hasEnchants && (!itemOutput.isOf(itemInput2.getItem()) || !itemOutput.isDamageable())) {
+					if (!item2HasEnchants && (!itemOutput.isOf(itemInput2.getItem()) || !itemOutput.isDamageable())) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
 						return;
 					}
 
-					if (itemOutput.isDamageable() && !hasEnchants) {
+					if (itemOutput.isDamageable() && !item2HasEnchants) {
 						int item1RemainDur = itemInput1.getMaxDamage() - itemInput1.getDamage(); // Formerly: kx
 						int item2RemainDur = itemInput2.getMaxDamage() - itemInput2.getDamage(); // Formerly: m
 						int n = item2RemainDur + itemOutput.getMaxDamage() * 12 / 100;
