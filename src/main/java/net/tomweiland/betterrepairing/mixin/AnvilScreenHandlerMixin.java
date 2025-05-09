@@ -62,16 +62,16 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		int totalNewEnchantLvls = 0;
 
 		if (!itemInput1.isEmpty() && EnchantmentHelper.canHaveEnchantments(itemInput1)) {
-			ItemStack itemOuput = itemInput1.copy(); // Formerly: itemStack2
+			ItemStack itemOutput = itemInput1.copy(); // Formerly: itemStack2
 			ItemStack itemInput2 = this.input.getStack(1); // Formerly: itemStack3
-			ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(itemOuput));
+			ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(itemOutput));
 			this.repairItemUsage = 0;
 			if (!itemInput2.isEmpty()) {
 				boolean item1HasMending = hasEnchantment(itemInput1, Enchantments.MENDING);
 				boolean hasEnchants = itemInput2.contains(DataComponentTypes.STORED_ENCHANTMENTS); // Formerly: bl
-				if (itemOuput.isDamageable() && itemInput1.canRepairWith(itemInput2)) {
-					int maxDamageRepair = itemOuput.getMaxDamage() / (item1HasMending ? 2 : 4); // Tools with mending require half the resources to be repaired fully
-					int dmgRepair = Math.min(itemOuput.getDamage(), maxDamageRepair); // Formerly: k
+				if (itemOutput.isDamageable() && itemInput1.canRepairWith(itemInput2)) {
+					int maxDamageRepair = itemOutput.getMaxDamage() / (item1HasMending ? 2 : 4); // Tools with mending require half the resources to be repaired fully
+					int dmgRepair = Math.min(itemOutput.getDamage(), maxDamageRepair); // Formerly: k
 					if (dmgRepair <= 0) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
@@ -81,32 +81,32 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					int repairItemsUsed; // Formerly: m
 					int repairItemUseCost = baseRepairCost + (item1HasMending ? 0 : 2);
 					for (repairItemsUsed = 0; dmgRepair > 0 && repairItemsUsed < itemInput2.getCount(); repairItemsUsed++) {
-						int n = itemOuput.getDamage() - dmgRepair;
-						itemOuput.setDamage(n);
+						int n = itemOutput.getDamage() - dmgRepair;
+						itemOutput.setDamage(n);
 						cost += repairItemUseCost;
-						dmgRepair = Math.min(itemOuput.getDamage(), maxDamageRepair);
+						dmgRepair = Math.min(itemOutput.getDamage(), maxDamageRepair);
 					}
 
 					this.repairItemUsage = repairItemsUsed;
 				} else {
-					if (!hasEnchants && (!itemOuput.isOf(itemInput2.getItem()) || !itemOuput.isDamageable())) {
+					if (!hasEnchants && (!itemOutput.isOf(itemInput2.getItem()) || !itemOutput.isDamageable())) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
 						return;
 					}
 
-					if (itemOuput.isDamageable() && !hasEnchants) {
+					if (itemOutput.isDamageable() && !hasEnchants) {
 						int item1RemainDur = itemInput1.getMaxDamage() - itemInput1.getDamage(); // Formerly: kx
 						int item2RemainDur = itemInput2.getMaxDamage() - itemInput2.getDamage(); // Formerly: m
-						int n = item2RemainDur + itemOuput.getMaxDamage() * 12 / 100;
+						int n = item2RemainDur + itemOutput.getMaxDamage() * 12 / 100;
 						int itemOutputDur = item1RemainDur + n; // Formerly: o
-						int itemOutputDmg = itemOuput.getMaxDamage() - itemOutputDur; // Formerly: p
+						int itemOutputDmg = itemOutput.getMaxDamage() - itemOutputDur; // Formerly: p
 						if (itemOutputDmg < 0) {
 							itemOutputDmg = 0;
 						}
 
-						if (itemOutputDmg < itemOuput.getDamage()) {
-							itemOuput.setDamage(itemOutputDmg);
+						if (itemOutputDmg < itemOutput.getDamage()) {
+							itemOutput.setDamage(itemOutputDmg);
 							cost += baseRepairCost + 2;
 						}
 					}
@@ -163,17 +163,17 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 				if (!this.newItemName.equals(itemInput1.getName().getString())) {
 					renameCost = 1;
 					cost += renameCost;
-					itemOuput.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
+					itemOutput.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
 				}
 			} else if (itemInput1.contains(DataComponentTypes.CUSTOM_NAME)) {
 				renameCost = 1;
 				cost += renameCost;
-				itemOuput.remove(DataComponentTypes.CUSTOM_NAME);
+				itemOutput.remove(DataComponentTypes.CUSTOM_NAME);
 			}
 			
 			this.levelCost.set(cost <= 0 ? 0 : cost);
 			if (cost <= 0) {
-				itemOuput = ItemStack.EMPTY;
+				itemOutput = ItemStack.EMPTY;
 			}
 
 			if (renameCost == cost && renameCost > 0) {
@@ -184,15 +184,15 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 				this.keepSecondSlot = true;
 			}
 
-			if (!itemOuput.isEmpty()) {
-				int totalEnchantLvls = itemOuput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
-				itemOuput.set(DataComponentTypes.REPAIR_COST, totalEnchantLvls + totalNewEnchantLvls);
-				EnchantmentHelper.set(itemOuput, builder.build());
+			if (!itemOutput.isEmpty()) {
+				int totalEnchantLvls = itemOutput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
+				itemOutput.set(DataComponentTypes.REPAIR_COST, totalEnchantLvls + totalNewEnchantLvls);
+				EnchantmentHelper.set(itemOutput, builder.build());
 				int enchantLvlTax = this.repairItemUsage > 0 ? totalEnchantLvls * this.repairItemUsage / 2 : totalEnchantLvls;
 				this.levelCost.set(cost + enchantLvlTax); // totalNewEnchantLvls is already added to cost earlier
 			}
 
-			this.output.setStack(0, itemOuput);
+			this.output.setStack(0, itemOutput);
 			this.sendContentUpdates();
 		} else {
 			this.output.setStack(0, ItemStack.EMPTY);

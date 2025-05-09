@@ -44,7 +44,7 @@ public class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
 
 			if (text != null) {
 				int k = this.backgroundWidth - 8 - this.textRenderer.getWidth(text) - 2;
-				int l = 69;
+				//int l = 69; // Why does this variable exist? It isn't used anywhere lol
 				context.fill(k - 2, 67, this.backgroundWidth - 8, 79, 1325400064);
 				context.drawTextWithShadow(this.textRenderer, text, k, 69, j);
 			}
