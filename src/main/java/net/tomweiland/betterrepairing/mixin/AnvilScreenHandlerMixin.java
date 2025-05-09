@@ -191,8 +191,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
 				int enchantLvlTax = (totalEnchants * 2 + totalNewEnchantLvls); // Pay per enchant, but only per enchant level for newly added enchants
 				if (this.repairItemUsage > 0) {
-					// Repair cost should be less affected by # and lvl of enchantments on the item since you do it a lot mroe often than combining enchantments
+					// Repair cost should be less affected by # and lvl of enchantments on the item since you do it a lot more often than combining enchantments
 					enchantLvlTax = enchantLvlTax / (item1HasMending ? 3 : 2) * this.repairItemUsage;
+				}
+				
+				if (hasEnchantment(itemOutput, Enchantments.BINDING_CURSE) || hasEnchantment(itemOutput, Enchantments.VANISHING_CURSE)) {
+					enchantLvlTax = 0; // Give curses an upside/positive effect so that there's a tradeoff and an interesting decision to be made
 				}
 				
 				this.levelCost.set(cost + enchantLvlTax); // totalNewEnchantLvls is already added to cost earlier
