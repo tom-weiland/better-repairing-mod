@@ -65,9 +65,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			ItemStack itemOutput = itemInput1.copy(); // Formerly: itemStack2
 			ItemStack itemInput2 = this.input.getStack(1); // Formerly: itemStack3
 			ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(itemOutput));
+			boolean item1HasMending = hasEnchantment(itemOutput, Enchantments.MENDING);
 			this.repairItemUsage = 0;
 			if (!itemInput2.isEmpty()) {
-				boolean item1HasMending = hasEnchantment(itemInput1, Enchantments.MENDING);
 				boolean hasEnchants = itemInput2.contains(DataComponentTypes.STORED_ENCHANTMENTS); // Formerly: bl
 				if (itemOutput.isDamageable() && itemInput1.canRepairWith(itemInput2)) {
 					int maxDamageRepair = itemOutput.getMaxDamage() / (item1HasMending ? 2 : 4); // Tools with mending require half the resources to be repaired fully
@@ -154,7 +154,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 				}
 			}
 
-			cost += totalNewEnchantLvls;
 			if (totalNewEnchantLvls > 0) {
 				cost += baseEnchantCost;
 			}
@@ -185,10 +184,17 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			}
 
 			if (!itemOutput.isEmpty()) {
-				int totalEnchantLvls = itemOutput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
-				itemOutput.set(DataComponentTypes.REPAIR_COST, totalEnchantLvls + totalNewEnchantLvls);
 				EnchantmentHelper.set(itemOutput, builder.build());
-				int enchantLvlTax = this.repairItemUsage > 0 ? totalEnchantLvls * this.repairItemUsage / 2 : totalEnchantLvls;
+				int totalEnchants = EnchantmentHelper.getEnchantments(itemOutput).getEnchantments().size();
+				int totalEnchantLvls = totalNewEnchantLvls + itemOutput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
+				itemOutput.set(DataComponentTypes.REPAIR_COST, totalEnchantLvls); // We repurpose mc's REPAIR_COST component to store how many enchantment levels the item has so we don't need to recalculate it
+
+				int enchantLvlTax = (totalEnchants * 2 + totalNewEnchantLvls); // Pay per enchant, but only per enchant level for newly added enchants
+				if (this.repairItemUsage > 0) {
+					// Repair cost should be less affected by # and lvl of enchantments on the item since you do it a lot mroe often than combining enchantments
+					enchantLvlTax = enchantLvlTax / (item1HasMending ? 3 : 2) * this.repairItemUsage;
+				}
+				
 				this.levelCost.set(cost + enchantLvlTax); // totalNewEnchantLvls is already added to cost earlier
 			}
 

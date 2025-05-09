@@ -8,11 +8,11 @@ Repairing gear with an anvil sucks. Mending is band-aid solution which makes Min
 
    You invest too heavily in acquiring your fully enchanted gear for the game to just not allow you to repair it anymore, especially at an arbitrary cost threshold and regardless of whether or not you actually have the theoretically required amount of levels. Now you can repair your gear indefinitely, and you don't need [the wiki](https://minecraft.wiki/w/Anvil_mechanics#Planning_the_enchanting_order) or external tools to figure out the optimally efficient way to combine your enchantments.
    
-2. **Repair cost no longer increases each time you repair the same.**
+2. **Repair cost no longer increases each time you repair the same item.**
 
-   Instead, the number of enchantment levels an item has will affect how many xp levels it takes to repair it. This way the repair cost remains fixed and in your control, which could make for some interesting decisions about whether that extra enchantment is really necessary—maybe you'd rather not have Fortune III on your primary digging pickaxe to save yourself some levels when repairing it 🤔
+   Instead, the number of enchantments an item has will affect how many xp levels it takes to repair it. This way the repair cost remains fixed and in your control, which could make for some interesting decisions about whether that extra enchantment is really necessary—maybe you'd rather not have Fortune III on your primary digging pickaxe to save yourself some levels when repairing it 🤔
 
-3. **Cost of combining enchanted items is now based on the total enchantment levels.**
+3. **Cost of combining enchanted items is now based on the total number of enchantments on the item and the number of new enchantment levels being added.**
 
    This is easier to understand than Minecraft's default "prior work penalty" system, and also means you don't need to consult the wiki, a flow chart, or an external tool to determine the cheapest way of getting all your enchantments onto an item.
 
