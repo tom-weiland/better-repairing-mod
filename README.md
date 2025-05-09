@@ -1,8 +1,8 @@
 # About This Mod
 
-Repairing gear with an anvil sucks. Mending is band-aid solution which makes Minecraft less fun. This mod reworks these systems in an attempt to address my issues with them.
+Repairing gear with an anvil sucks. Mending is band-aid solution which makes Minecraft less fun. This mod reworks these systems in an attempt to address my issues with them, while trying to keep the Vanilla feel. Importantly, it can be used on servers *without* requiring players to also install it on their end!
 
-## Changes to Anvil Repairing
+## Changes to Anvil Repairing (And Renaming)
 
 1. **NEVER AGAIN have an anvil tell you it's "too expensive"!**
 
@@ -15,6 +15,10 @@ Repairing gear with an anvil sucks. Mending is band-aid solution which makes Min
 3. **Cost of combining enchanted items is now based on the total number of enchantments on the item and the number of new enchantment levels being added.**
 
    This is easier to understand than Minecraft's default "prior work penalty" system, and also means you don't need to consult the wiki, a flow chart, or an external tool to determine the cheapest way of getting all your enchantments onto an item.
+
+4. **Renaming an item only ever costs 1 level.**
+
+   Renaming cost is no longer affected by the number of enchantments an item has or how often you've repaired it.
 
 ## Changes to Mending
 
@@ -32,4 +36,4 @@ Repairing gear with an anvil sucks. Mending is band-aid solution which makes Min
 
    Since this mod fixes the main problems with the anvil repair system, mending no longer needs to exist as a substitute and can be repurposed. It now makes repairing your gear cheaper and more efficient—less materials are required to fully repair an item and each repair costs less levels. This takes mending from a critical enchantment that you *must* have on all of your gear no matter how tedious it is to acquire, to an optional (but still useful) enchantment.
 
-   Maybe now you'll arrive at that end city and actually have a use for the mending items you find because you aren't fully decked out in it yet!
+   Maybe now you'll arrive at that end city and actually have a use for the mending items you find because you didn't bother getting fully decked out in it quite yet!
