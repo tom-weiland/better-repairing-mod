@@ -3,15 +3,15 @@
 	"id": "betterrepairing",
 	"version": "${version}",
 	"name": "Better Repairing",
-	"description": "Reworks the anvil repair mechanic to make it fun and relevant.",
+	"description": "Reworks the anvil repair system (and mending) to make it fun and relevant again.",
 	"authors": [
 		"Tom Weiland"
 	],
 	"contact": {
 		"homepage": "https://tomweiland.net/",
-		"sources": ""
+		"sources": "https://github.com/tom-weiland/better-repairing-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/betterrepairing/icon.png",
 	"environment": "*",
 	"entrypoints": {
