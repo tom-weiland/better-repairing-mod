@@ -1,4 +1,4 @@
-package net.tomweiland.betterrepairing.mixin;
+package net.tomweiland.better_repairing.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

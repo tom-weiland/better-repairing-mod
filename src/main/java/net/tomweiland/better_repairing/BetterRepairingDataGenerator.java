@@ -1,4 +1,4 @@
-package net.tomweiland.betterrepairing;
+package net.tomweiland.better_repairing;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;

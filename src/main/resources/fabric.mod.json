@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "betterrepairing",
+	"id": "better_repairing",
 	"version": "${version}",
 	"name": "Better Repairing",
-	"description": "Reworks the anvil repair system (and mending) to make it fun and relevant again.",
+	"description": "Reworks the anvil repair system (and mending) to make it relevant (and hopefully fun) again.",
 	"authors": [
 		"Tom Weiland"
 	],
@@ -12,21 +12,21 @@
 		"sources": "https://github.com/tom-weiland/better-repairing-mod"
 	},
 	"license": "MIT",
-	"icon": "assets/betterrepairing/icon.png",
+	"icon": "assets/better_repairing/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.tomweiland.betterrepairing.BetterRepairing"
+			"net.tomweiland.better_repairing.BetterRepairing"
 		],
 		"fabric-datagen": [
-			"net.tomweiland.betterrepairing.BetterRepairingDataGenerator"
+			"net.tomweiland.better_repairing.BetterRepairingDataGenerator"
 		],
 		"client": [
-			"net.tomweiland.betterrepairing.BetterRepairingClient"
+			"net.tomweiland.better_repairing.BetterRepairingClient"
 		]
 	},
 	"mixins": [
-		"betterrepairing.mixins.json"
+		"better_repairing.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.14",

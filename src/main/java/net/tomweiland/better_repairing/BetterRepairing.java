@@ -1,4 +1,4 @@
-package net.tomweiland.betterrepairing;
+package net.tomweiland.better_repairing;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BetterRepairing implements ModInitializer {
-	public static final String MOD_ID = "betterrepairing";
+	public static final String MOD_ID = "better_repairing";
 	
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
