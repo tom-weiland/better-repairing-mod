@@ -40,9 +40,9 @@ Minecraft's Mending behaviour is incredibly overpowered and has many downsides:
  - Once you have it, the most efficient way to mend your tools all the way is to sit in front of an xp farm. Also incredibly unexciting.
  - Armor effectively becomes unbreakable because you're wearing it, meaning xp will always repair it (unlike tools which are only repaired by xp if you are holding them), and situations where your armor takes more damage than the xp you collect can repair are virtually non-existent.
    
-**2. Mending now reduces the repair cost (levels) and number of materials required to repair gear in an anvil.**
+**2. Mending now reduces the number of materials required to repair gear in an anvil.**
 
-Since this mod fixes the main problems with the anvil repair system, Mending no longer needs to exist as a substitute and can be repurposed. It now makes repairing your gear cheaper and more efficient—less materials are required to fully repair an item and each repair costs less levels. This takes Mending from a critical enchantment that you *must* have on all of your gear no matter how tedious it is to acquire, to an optional (but still useful) enchantment.
+Since this mod fixes the main problems with the anvil repair system, Mending no longer needs to exist as a substitute and can be repurposed. It now makes repairing your gear cheaper and more efficient by requiring less materials to fully repair an item. This takes Mending from a critical enchantment that you *must* have on all of your gear no matter how tedious it is to acquire, to an optional (but still useful) enchantment.
 
 Maybe now you'll arrive at that end city and actually have a use for the Mending items you find because you didn't bother getting fully decked out in it quite yet!
 
@@ -58,4 +58,4 @@ Progressively increasing the amount of xp required to reach the next experience 
 
 This mod removes level scaling so that the experience points required to reach the next level remain constant, which makes the 1st level just as valuable as the 30th (low levels represent more xp and high levels represent less compared to Vanilla). Gone are the days of hitting level 30 and having to decide between two annoying options: interrupt what you're doing to go enchant something or effectively waste any further xp you gain.
 
-Yes, this means enchanting multiple items is cheaper than before (as long as you don't die in between) because getting back to level 30 from level 27 takes less xp, but that may also help make enchanting more useful again in a world where villager trading exists.
+Yes, this means enchanting multiple items is cheaper than before (as long as you don't die in between) because getting back to level 30 from level 27 takes less xp, but you also can't use the less valuable levels (1-15) to repair and combine things at a massive discount. Also, being a bit cheaper could arguably make enchanting more competitive with villager trading again.
