@@ -97,8 +97,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 						// Exempt repairing with netherite ingots from any level cost increases, even if the item doesn't have mending
 						if (isRepairingNetheriteWithDiamond) {
 							unitRepairCost += 4; // Mending level discount doesn't apply when using diamonds to repair netherite gear, in fact it should cost slightly more
-						} else if (!item1HasMending) {
-							unitRepairCost += 3;
 						}
 					}
 					for (repairItemsUsed = 0; dmgRepair > 0 && repairItemsUsed < itemInput2.getCount(); repairItemsUsed++) {
@@ -207,20 +205,20 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			if (!itemOutput.isEmpty()) {
 				EnchantmentHelper.set(itemOutput, builder.build());
 				int totalEnchants = EnchantmentHelper.getEnchantments(itemOutput).getEnchantments().size();
-				int totalEnchantLvls = totalNewEnchantLvls + itemOutput.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
-				itemOutput.set(DataComponentTypes.REPAIR_COST, totalEnchantLvls); // We repurpose mc's REPAIR_COST component to store how many enchantment levels the item has so we don't need to recalculate it
-
-				int enchantLvlTax = (totalEnchants * 2 + totalNewEnchantLvls); // Pay per enchant, but only per enchant level for newly added enchants
+				int enchantLvlTax = totalEnchants + totalNewEnchantLvls; // Pay per enchant, but only per enchant level for newly added enchants
 				if (this.repairItemUsage > 0) {
-					// Repair cost should be less affected by # and lvl of enchantments on the item since you do it a lot more often than combining enchantments
-					enchantLvlTax = enchantLvlTax / (item1HasMending ? 3 : 2) * this.repairItemUsage;
+					enchantLvlTax *= this.repairItemUsage;
+				} else {
+					// Give more weight to the number of enchantments when not repairing
+					enchantLvlTax += totalEnchants;
 				}
 				
 				if (hasEnchantment(itemOutput, Enchantments.BINDING_CURSE) || hasEnchantment(itemOutput, Enchantments.VANISHING_CURSE)) {
-					enchantLvlTax = 0; // Give curses an upside/positive effect so that there's a tradeoff and an interesting decision to be made
+					// Give curses an upside/positive effect so that there's a tradeoff and an interesting decision to be made
+					enchantLvlTax = 0;
 				}
 				
-				this.levelCost.set(cost + enchantLvlTax); // totalNewEnchantLvls is already added to cost earlier
+				this.levelCost.set(cost + enchantLvlTax);
 			}
 
 			this.output.setStack(0, itemOutput);

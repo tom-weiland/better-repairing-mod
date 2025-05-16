@@ -58,4 +58,4 @@ Progressively increasing the amount of xp required to reach the next experience 
 
 This mod removes level scaling so that the experience points required to reach the next level remain constant, which makes the 1st level just as valuable as the 30th (low levels represent more xp and high levels represent less compared to Vanilla). Gone are the days of hitting level 30 and having to decide between two annoying options: interrupt what you're doing to go enchant something or effectively waste any further xp you gain.
 
-Yes, this means enchanting multiple items is cheaper than before (as long as you don't die in between) because getting back to level 30 from level 27 takes less xp, but that may also help make enchanting more useful again in a world where villager trading exists.
+Yes, this means enchanting multiple items is cheaper than before (as long as you don't die in between) because getting back to level 30 from level 27 takes less xp, but you also can't use the less valuable levels (1-15) to repair and combine things at a massive discount. Also, being a bit cheaper could arguably make enchanting more competitive with villager trading again.
