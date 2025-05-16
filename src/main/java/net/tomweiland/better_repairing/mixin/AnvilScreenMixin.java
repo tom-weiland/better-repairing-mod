@@ -1,5 +1,6 @@
 package net.tomweiland.better_repairing.mixin;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +19,7 @@ import net.minecraft.util.Identifier;
 @Mixin(AnvilScreen.class)
 public class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
 
-    @Shadow
+    @Shadow @Final
     private PlayerEntity player;
 
     public AnvilScreenMixin(AnvilScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {

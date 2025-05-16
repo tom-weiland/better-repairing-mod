@@ -4,6 +4,8 @@ When's the last time you repaired your gear using an anvil? Probably not since t
 
 Repairing items with an anvil sucks. Mending is a band-aid solution which makes Minecraft less fun. This mod reworks these systems in an attempt to address my issues with them, while trying to keep the Vanilla feel. Importantly, it can be used on servers *without* requiring players to also install it on their end!
 
+Below is a list of the changes this mod makes, along with some of the reasoning behind them.
+
 ## Changes to Anvil Repairing (And Renaming)
 
 **1. NEVER AGAIN have an anvil tell you it's "too expensive"!**
@@ -20,7 +22,7 @@ This is easier to understand than Minecraft's default "prior work penalty" syste
 
 **4. Netherite gear can be fully repaired with a single netherite ingot.**
 
-Why this isn't how it works in default Minecraft is completely beyond me. Charging *4* whole netherite ingots to fully repair an item is absurd when 1 is enough to craft a brand new version of that same item.
+Why this isn't how it works in vanilla Minecraft is completely beyond me. Charging *4* whole netherite ingots to fully repair an item is absurd when 1 is enough to craft a brand new version of that same item.
 
 **5. Renaming an item only ever costs 1 level.**
 
@@ -30,7 +32,7 @@ Renaming cost is no longer affected by the number of enchantments an item has or
 
 **1. Mending no longer repairs gear using xp.**
 
-Minecraft's default Mending behaviour is incredibly overpowered and has many downsides:
+Minecraft's Mending behaviour is incredibly overpowered and has many downsides:
  - It makes the anvil repair system entirely obsolete. This is in fact the primary reason for its existence—to circumvent the anvil's bad repair mechanics.
  - It makes diamonds nearly worthless once you've got a full set of gear, and as a result there is almost zero reason to go mining after that point...in a game called MINEcraft.
  - The most consistent way of acquiring it involves mindlessly placing a lectern next to a villager (whom you've probably enslaved and locked in a small box/hole) over and over and over and over again until you finally get lucky. Boooooring! And *SO* tedious 🥱
@@ -47,3 +49,13 @@ Maybe now you'll arrive at that end city and actually have a use for the Mending
 **3. Netherite gear with Mending on it can be repaired using diamonds.**
 
 At the netherite tier, the resource discount that Mending provides changes—instead of reducing the number of materials needed to fully repair the item (since a single netherite ingot will do that), it allows you to use diamonds for the repair instead of netherite ingots. This does cost more levels per repair than usual, but provides an alternative option to mining for more ancient debris. I personally find caving in the overworld much more interesting and enjoyable than blowing up beds at the bottom of the nether over and over again.
+
+## Changes to XP
+
+**The amount of XP required to reach the next level is now constant.**
+
+Progressively increasing the amount of xp required to reach the next experience level (as is the case in Vanilla) might seem like a good idea—after all, that's how xp and leveling works in virtually every other game, right? However, Minecraft treats experience levels as a resource which you spend to enchant and repair things. The fact that those actions cost experience *levels* instead of *points* means that levels you spend when you have a lot of levels cost you *significantly* more xp than if you had fewer levels. This means that to be efficient, you ideally never want to have more levels than exactly what is required to perform the desired action.
+
+This mod removes level scaling so that the experience points required to reach the next level remain constant, which makes the 1st level just as valuable as the 30th (low levels represent more xp and high levels represent less compared to Vanilla). Gone are the days of hitting level 30 and having to decide between two annoying options: interrupt what you're doing to go enchant something or effectively waste any further xp you gain.
+
+Yes, this means enchanting multiple items is cheaper than before (as long as you don't die in between) because getting back to level 30 from level 27 takes less xp, but that may also help make enchanting more useful again in a world where villager trading exists.

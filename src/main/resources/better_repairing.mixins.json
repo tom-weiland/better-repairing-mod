@@ -5,7 +5,8 @@
 	"mixins": [
 		"AnvilScreenMixin",
 		"AnvilScreenHandlerMixin",
-		"ExperienceOrbEntityMixin"
+		"ExperienceOrbEntityMixin",
+		"PlayerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
