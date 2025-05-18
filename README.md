@@ -50,6 +50,12 @@ Maybe now you'll arrive at that end city and actually have a use for the Mending
 
 At the netherite tier, the resource discount that Mending provides changes—instead of reducing the number of materials needed to fully repair the item (since a single netherite ingot will do that), it allows you to use diamonds for the repair instead of netherite ingots. This does cost more levels per repair than usual, but provides an alternative option to mining for more ancient debris. I personally find caving in the overworld much more interesting and enjoyable than blowing up beds at the bottom of the nether over and over again.
 
+**4. Armor with Mending won't break when its durability reaches 0.**
+
+Other benefits aside, vanilla Mending is incredibly convenient to have on your armor because it *massively* reduces the risk of accidentally snapping it (since it keeps it fully repaired in almost all situations). This mod changes Mending's behaviour, but it would be a step backwards to remove this quality-of-life improvement. As an alternative, armor enchanted with Mending now stops working, but doesn't break—giving you the ability to repair it instead of permanently losing it—when its durability reaches 0.
+
+This essentially mimics the way the elytra works, meaning that broken armor will not protect you or give you any of its enchantment effects. Until you repair it again, it's as though you aren't actually wearing it!
+
 ## Changes to XP
 
 **The amount of XP required to reach the next level is now constant.**

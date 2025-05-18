@@ -36,5 +36,10 @@
 	},
 	"suggests": {
 		"another-mod": "*"
+	},
+	"custom": {
+		"loom:injected_interfaces": {
+			"net/minecraft/item/ItemStack": ["net/tomweiland/better_repairing/ItemStackExtensions"]
+		}
 	}
 }

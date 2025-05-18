@@ -15,7 +15,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.ForgingScreenHandler;
@@ -65,7 +64,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			ItemStack itemOutput = itemInput1.copy(); // Formerly: itemStack2
 			ItemStack itemInput2 = this.input.getStack(1); // Formerly: itemStack3
 			ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(itemOutput));
-			boolean item1HasMending = hasEnchantment(itemOutput, Enchantments.MENDING);
+			boolean item1HasMending = itemOutput.hasEnchantment(Enchantments.MENDING);
 			this.repairItemUsage = 0;
 			
 			if (!itemInput2.isEmpty()) {
@@ -213,7 +212,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					enchantLvlTax += totalEnchants;
 				}
 				
-				if (hasEnchantment(itemOutput, Enchantments.BINDING_CURSE) || hasEnchantment(itemOutput, Enchantments.VANISHING_CURSE)) {
+				if (itemOutput.hasEnchantment(Enchantments.BINDING_CURSE) || itemOutput.hasEnchantment(Enchantments.VANISHING_CURSE)) {
 					// Give curses an upside/positive effect so that there's a tradeoff and an interesting decision to be made
 					enchantLvlTax = 0;
 				}
@@ -230,12 +229,4 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         ci.cancel();
     }
-
-	private static boolean hasEnchantment(ItemStack stack, RegistryKey<Enchantment> enchantment) {
-		// I despise this with a BURNING PASSION, it's so disgusting but I cannot for the life of me figure out how to
-		// determine if an item stack has a given enchantment other than this. The internet is useless. The AIs are
-		// hallucinating. I've landed on the same Reddit thread like 5 times during my scouring of online resources. It's
-		// insane that there does not appear to be a better solution than this, but if it exists I can't freaking find it.
-		return stack.getEnchantments().getEnchantments().toString().contains(enchantment.getValue().toString());
-	}
 }

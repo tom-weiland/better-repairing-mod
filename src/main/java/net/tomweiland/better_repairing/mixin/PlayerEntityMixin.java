@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.entity.player.PlayerEntity;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin {
+public abstract class PlayerEntityMixin {
     private static final int DEFAULT_LVL_30_XP = 1395; // Total xp needed to reach level 30 in default Minecraft
     private static final int XP_PER_LVL = Math.ceilDiv(DEFAULT_LVL_30_XP, 30);
 
