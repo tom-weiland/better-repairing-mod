@@ -22,7 +22,7 @@ This is easier to understand than Minecraft's default "prior work penalty" syste
 
 **4. Netherite gear can be fully repaired with a single netherite ingot.**
 
-Why this isn't how it works in vanilla Minecraft is completely beyond me. Charging *4* whole netherite ingots to fully repair an item is absurd when 1 is enough to craft a brand new version of that same item.
+Why this isn't how it works in vanilla Minecraft is completely beyond me. Charging *4 whole netherite ingots* to fully repair an item is absurd when 1 is enough to craft a brand new version of that same item.
 
 **5. Renaming an item only ever costs 1 level.**
 
@@ -33,12 +33,12 @@ Renaming cost is no longer affected by the number of enchantments an item has or
 **1. Mending no longer repairs gear using xp.**
 
 Minecraft's Mending behaviour is incredibly overpowered and has many downsides:
- - It makes the anvil repair system entirely obsolete. This is in fact the primary reason for its existence—to circumvent the anvil's bad repair mechanics.
+ - It makes the anvil repair system entirely obsolete. Giving players the ability to circumvent the anvil's bad repair mechanics is arguably the reason why it exists in the first place.
  - It makes diamonds nearly worthless once you've got a full set of gear, and as a result there is almost zero reason to go mining after that point...in a game called MINEcraft.
  - The most consistent way of acquiring it involves mindlessly placing a lectern next to a villager (whom you've probably enslaved and locked in a small box/hole) over and over and over and over again until you finally get lucky. Boooooring! And *SO* tedious 🥱
  - The second most consistent way of acquiring it involves fishing for long periods of time or building an AFK fish farm. Sounds unappealing enough that I've never even bothered.
  - Once you have it, the most efficient way to mend your tools all the way is to sit in front of an xp farm. Also incredibly unexciting.
- - Armor effectively becomes unbreakable because you're wearing it, meaning xp will always repair it (unlike tools which are only repaired by xp if you are holding them), and situations where your armor takes more damage than the xp you collect can repair are virtually non-existent.
+ - Armor effectively becomes unbreakable because xp will always repair it since you're wearing it (unlike tools which are only repaired by xp if you are actively holding them), and situations where your armor takes more damage than the xp you collect can repair are virtually non-existent. Not having your armor break accidentally is nice, but why should armor even have durability if it doesn't affect gameplay *at all* in the late game?
    
 **2. Mending now reduces the number of materials required to repair gear in an anvil.**
 
@@ -48,7 +48,7 @@ Maybe now you'll arrive at that end city and actually have a use for the Mending
 
 **3. Netherite gear with Mending on it can be repaired using diamonds.**
 
-At the netherite tier, the resource discount that Mending provides changes—instead of reducing the number of materials needed to fully repair the item (since a single netherite ingot will do that), it allows you to use diamonds for the repair instead of netherite ingots. This does cost more levels per repair than usual, but provides an alternative option to mining for more ancient debris. I personally find caving in the overworld much more interesting and enjoyable than blowing up beds at the bottom of the nether over and over again.
+At the netherite tier, the resource discount that Mending provides changes—instead of reducing the number of materials needed to fully repair the item (since a single netherite ingot will do that anyways), it allows you to use diamonds for the repair instead of netherite ingots. This does cost more levels per repair than usual, but provides an alternative option to mining for more ancient debris. I personally find caving in the overworld much more interesting and enjoyable than blowing up beds at the bottom of the nether over and over again.
 
 **4. Armor with Mending won't break when its durability reaches 0.**
 
@@ -60,7 +60,7 @@ This essentially mimics the way the elytra works, meaning that broken armor will
 
 **The amount of XP required to reach the next level is now constant.**
 
-Progressively increasing the amount of xp required to reach the next experience level (as is the case in Vanilla) might seem like a good idea—after all, that's how xp and leveling works in virtually every other game, right? However, Minecraft treats experience levels as a resource which you spend to enchant and repair things. The fact that those actions cost experience *levels* instead of *points* means that levels you spend when you have a lot of levels cost you *significantly* more xp than if you had fewer levels. This means that to be efficient, you ideally never want to have more levels than exactly what is required to perform the desired action.
+Progressively increasing the amount of xp required to reach the next experience level (as is the case in Vanilla) might seem like a good idea—after all, that's how xp and leveling works in virtually every other game, right? However, Minecraft treats experience levels as a resource which you spend to enchant and repair things. The fact that those actions cost experience *levels* instead of *points* means that levels you spend when you have a lot of levels cost you *significantly* more xp than if you had fewer levels. To be efficient, you ideally never want to have more levels than exactly what is required to perform the desired action.
 
 This mod removes level scaling so that the experience points required to reach the next level remain constant, which makes the 1st level just as valuable as the 30th (low levels represent more xp and high levels represent less compared to Vanilla). Gone are the days of hitting level 30 and having to decide between two annoying options: interrupt what you're doing to go enchant something or effectively waste any further xp you gain.
 
