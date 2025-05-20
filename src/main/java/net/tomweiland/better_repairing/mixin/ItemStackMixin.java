@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.component.ComponentHolder;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
 
@@ -25,11 +26,13 @@ public abstract class ItemStackMixin implements ComponentHolder, FabricItemStack
 
     @Override
     public boolean hasEnchantment(RegistryKey<Enchantment> enchantment) {
-		// I despise this with a BURNING PASSION, it's so disgusting but I cannot for the life of me figure out how to
-		// determine if an item stack has a given enchantment other than this. The internet is useless. The AIs are
-		// hallucinating. I've landed on the same Reddit thread like 5 times during my scouring of online resources. It's
-		// insane that there does not appear to be a better solution than this, but if it exists I can't freaking find it.
-		return this.getEnchantments().getEnchantments().toString().contains(enchantment.getValue().toString());
+        var enchants = EnchantmentHelper.getEnchantments((ItemStack)(Object)this).getEnchantments();
+        for (var enchant : enchants) {
+            if (enchant.matchesKey(enchantment)) {
+                return true;
+            }
+        }
+		return false;
 	}
 
     @Redirect(method = "onDurabilityChange", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shouldBreak()Z"))
