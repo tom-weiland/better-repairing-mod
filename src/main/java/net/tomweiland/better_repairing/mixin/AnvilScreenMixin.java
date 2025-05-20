@@ -17,7 +17,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 @Mixin(AnvilScreen.class)
-public class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
+public abstract class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
 
     @Shadow @Final
     private PlayerEntity player;
@@ -55,5 +55,5 @@ public class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
     }
 
     @Shadow
-    protected void drawInvalidRecipeArrow(DrawContext context, int x, int y) { }
+    protected abstract void drawInvalidRecipeArrow(DrawContext context, int x, int y);
 }

@@ -10,7 +10,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.registry.entry.RegistryEntry;
 
 @Mixin(Enchantment.class)
-public class EnchantmentMixin{
+public abstract class EnchantmentMixin{
 
     @Inject(method = "canBeCombined", at = @At("RETURN"), cancellable = true)
     private static void onCanBeCombined(RegistryEntry<Enchantment> first, RegistryEntry<Enchantment> second, CallbackInfoReturnable<Boolean> cir) {

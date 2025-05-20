@@ -11,6 +11,7 @@ import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
+
 import net.tomweiland.better_repairing.BetterRepairing;
 import net.tomweiland.better_repairing.ItemStackExtensions;
 

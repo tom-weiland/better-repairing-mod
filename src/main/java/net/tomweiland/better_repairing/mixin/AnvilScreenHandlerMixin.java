@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
+
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -95,11 +96,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
 					int repairItemsUsed; // Formerly: m
 					int unitRepairCost = baseRepairCost;
-					if (!item2IsNetherite) {
-						// Exempt repairing with netherite ingots from any level cost increases, even if the item doesn't have mending
-						if (isRepairingNetheriteWithDiamond) {
-							unitRepairCost += 4; // Mending level discount doesn't apply when using diamonds to repair netherite gear, in fact it should cost slightly more
-						}
+					if (isRepairingNetheriteWithDiamond) {
+						unitRepairCost += 2; // Charge more levels for repairing netherite gear with diamonds
 					}
 					for (repairItemsUsed = 0; dmgRepair > 0 && repairItemsUsed < itemInput2.getCount(); repairItemsUsed++) {
 						int n = itemOutput.getDamage() - dmgRepair;
