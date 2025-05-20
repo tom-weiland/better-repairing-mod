@@ -24,6 +24,8 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
 
+import net.tomweiland.better_repairing.BetterRepairing;
+
 @Mixin(AnvilScreenHandler.class)
 public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
@@ -87,6 +89,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					if (dmgRepair <= 0) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
+						ci.cancel();
 						return;
 					}
 
@@ -110,6 +113,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					if (!item2HasEnchants && (!itemOutput.isOf(itemInput2.getItem()) || !itemOutput.isDamageable())) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
+						ci.cancel();
 						return;
 					}
 
@@ -134,19 +138,26 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					boolean hasUnacceptableEnchant = false; // Formerly: bl3
 
 					for (Entry<RegistryEntry<Enchantment>> entry : itemEnchantmentsComponent.getEnchantmentEntries()) {
-						RegistryEntry<Enchantment> registryEntry = (RegistryEntry<Enchantment>)entry.getKey();
-						int item1EnchantLvl = builder.getLevel(registryEntry); // Formerly: q
+						RegistryEntry<Enchantment> item2Enchant = (RegistryEntry<Enchantment>)entry.getKey(); // Formerly: registryEntry
+						int item1EnchantLvl = builder.getLevel(item2Enchant); // Formerly: q
 						int item2EnchantLvl = entry.getIntValue(); // Formerly: r
 						item2EnchantLvl = item1EnchantLvl == item2EnchantLvl ? item2EnchantLvl + 1 : Math.max(item2EnchantLvl, item1EnchantLvl);
-						Enchantment enchantment = registryEntry.value();
+						Enchantment enchantment = item2Enchant.value();
 						boolean isAcceptableEnchant = enchantment.isAcceptableItem(itemInput1); // Formerly: bl4
 						if (this.player.getAbilities().creativeMode || itemInput1.isOf(Items.ENCHANTED_BOOK)) {
 							isAcceptableEnchant = true;
 						}
 
-						for (RegistryEntry<Enchantment> registryEntry2 : builder.getEnchantments()) {
-							if (!registryEntry2.equals(registryEntry) && !Enchantment.canBeCombined(registryEntry, registryEntry2)) {
+						for (RegistryEntry<Enchantment> item1Enchant : builder.getEnchantments()) {
+							if (!item1Enchant.equals(item2Enchant) && !Enchantment.canBeCombined(item2Enchant, item1Enchant)) {
 								isAcceptableEnchant = false;
+								if (item2Enchant.matchesKey(Enchantments.BINDING_CURSE)) {
+									// If binding curse can't be added, don't allow the items to be combined (as that would make it possible to remove curses)
+									this.output.setStack(0, ItemStack.EMPTY);
+									this.levelCost.set(0);
+									ci.cancel();
+									return;
+								}
 							}
 						}
 						
@@ -159,7 +170,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 								item2EnchantLvl = enchantment.getMaxLevel();
 							}
 
-							builder.set(registryEntry, item2EnchantLvl);
+							builder.set(item2Enchant, item2EnchantLvl);
 							totalNewEnchantLvls += item2EnchantLvl;
 						}
 					}
@@ -167,6 +178,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					if (hasUnacceptableEnchant && !hasAcceptableEnchant) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
+						ci.cancel();
 						return;
 					}
 				}
@@ -212,8 +224,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					enchantLvlTax += totalEnchants;
 				}
 				
-				if (itemOutput.hasEnchantment(Enchantments.BINDING_CURSE) || itemOutput.hasEnchantment(Enchantments.VANISHING_CURSE)) {
+				if (itemOutput.hasEnchantment(Enchantments.BINDING_CURSE) || (!BetterRepairing.isHardcore(this.player) && itemOutput.hasEnchantment(Enchantments.VANISHING_CURSE))) {
 					// Give curses an upside/positive effect so that there's a tradeoff and an interesting decision to be made
+					// Only applies to curse of vanishing when not in hardcore mode
 					enchantLvlTax = 0;
 				}
 				

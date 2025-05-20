@@ -65,3 +65,19 @@ Progressively increasing the amount of xp required to reach the next experience 
 This mod removes level scaling so that the experience points required to reach the next level remain constant, which makes the 1st level just as valuable as the 30th (low levels represent more xp and high levels represent less compared to Vanilla). Gone are the days of hitting level 30 and having to decide between two annoying options: interrupt what you're doing to go enchant something or effectively waste any further xp you gain.
 
 Yes, this means enchanting multiple items is cheaper than before (as long as you don't die in between) because getting back to level 30 from level 27 takes less xp, but you also can't use the less valuable levels (1-15) to repair and combine things at a massive discount. Also, being a bit cheaper could arguably make enchanting more competitive with villager trading again.
+
+## Changes to Curses
+
+**1. Cursed items are exempt from the enchantment level tax.**
+
+The level cost for repairing or combining an item scales with how many enchantments it has (the "enchantment level tax"), but items with Curse of Vanishing and/or Curse of Binding on them are exempt from this increase. This means that instead of always jsut avoiding cursed items when possible, you might decide that the xp discount is worth the risk/inconvenience.
+
+However, in Hardcore mode this exemption only applies to Curse of Binding, as Curse of Vanishing has no downside there (since dying means you can't keep playing on the world anymore anyways).
+
+**2. Curse of Binding is no longer compatible with Mending.**
+
+Curse of Binding prevents you from unequipping an item, and now that Mending prevents armor from fully breaking, having both on an item would mean it can only be removed by dying. This would also mean that in Hardcore mode or when playing with keepInventory enabled, removing the item would be impossible.
+
+**3. Curse of Vanishing works even when keepInventory is enabled.**
+
+In vanilla Minecraft, enabling the keepInventory game rule prevents you from dropping your items on death, including those with Curse of Vanishing on them. This doesn't make any sense, and would provide the enchantment level tax exemption without any risk.
