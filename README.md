@@ -81,3 +81,8 @@ Curse of Binding prevents you from unequipping an item, and now that Mending pre
 ### 3. Curse of Vanishing works even when keepInventory is enabled.
 
 In vanilla Minecraft, enabling the keepInventory game rule prevents you from dropping your items on death, including those with Curse of Vanishing on them. This doesn't make any sense, and would provide the enchantment level tax exemption without any risk.
+
+# Check Out My Other Mods!
+
+**[Better Repairing](https://github.com/tom-weiland/better-repairing-mod):** Reworks the anvil repair system, Mending enchantment, and more to fix their flaws.<br>
+**[Better Transportation](https://github.com/tom-weiland/better-transportation-mod):** Reworks Minecraft's methods of transportation to make them relevant again.
