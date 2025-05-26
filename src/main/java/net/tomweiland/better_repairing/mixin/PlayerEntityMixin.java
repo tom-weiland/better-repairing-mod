@@ -23,7 +23,8 @@ public abstract class PlayerEntityMixin {
 
     @Inject(method = "getNextLevelExperience", at = @At("HEAD"), cancellable = true)
     private void onGetNextLevelExperience(CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(XP_PER_LVL); // Make xp required to reach the next level constant
+        // Make xp required to reach the next level constant
+        cir.setReturnValue(XP_PER_LVL);
     }
 
     @Inject(method = "dropInventory", at = @At("HEAD"))

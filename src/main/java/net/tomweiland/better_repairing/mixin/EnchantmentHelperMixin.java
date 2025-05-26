@@ -11,7 +11,8 @@ import net.minecraft.item.ItemStack;
 public abstract class EnchantmentHelperMixin {
     @Redirect(
         method = "forEachEnchantment(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/enchantment/EnchantmentHelper$ContextAwareConsumer;)V",
-        at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"))
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z")
+    )
     private static boolean isEmptyOrFullyDamaged(ItemStack stack) {
         // Make it not apply enchantments if the item durability is 0
         return stack.isEmpty() || stack.isFullyDamaged();

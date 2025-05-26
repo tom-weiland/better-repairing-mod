@@ -48,14 +48,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 	}
 
     @Shadow
-    private static int getNextCost(int cost)
-    {
-        return 0;
-    }
+    private static int getNextCost(int cost) { return 0; }
 
     @Inject(method = "updateResult", at = @At("HEAD"), cancellable = true)
     private void onUpdateResult(CallbackInfo ci) {
-		// Based on Minecraft's AnvilScreenHandler.updateResult method
+		// Based on Minecraft's AnvilScreenHandler.updateResult method. This could probably be done more surgically but since we're making
+		// substantial changes to anvil behaviour, a brute-force replacement of the original logic like this is probably fiiine...
         ItemStack itemInput1 = this.input.getStack(0); // Formerly: itemStack1
 		this.keepSecondSlot = false;
 		this.levelCost.set(1);

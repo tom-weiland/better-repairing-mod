@@ -20,6 +20,7 @@ public abstract class ExperienceOrbEntityMixin extends Entity {
 
     @Inject(method = "repairPlayerGears", at = @At("HEAD"), cancellable = true)
     private void onRepairPlayerGears(ServerPlayerEntity player, int amount, CallbackInfoReturnable<Integer> cir) {
+        // Prevent xp from being used to repair mending gear
         cir.setReturnValue(amount);
     }
 }
