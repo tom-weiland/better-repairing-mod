@@ -2,7 +2,9 @@
 
 When's the last time you repaired your gear using an anvil? Probably not since the Mending enchantment was added to the game in 2016.
 
-Repairing items with an anvil sucks. Mending is a band-aid solution which makes Minecraft less fun. This mod reworks these systems in an attempt to address my issues with them, while trying to keep the Vanilla feel. Importantly, it can be used on servers *without* requiring players to also install it on their end!
+Repairing items with an anvil sucks. Mending is a band-aid solution which makes Minecraft less fun. This mod reworks these systems in an attempt to address my issues with them, while trying to keep the Vanilla feel.
+
+Importantly, it can be used on servers *without* requiring players to also install it on their end. Note that clients without the mod installed may display incorrect level costs when renaming an item, but this is purely a visual issue—the correct amount of levels will still be removed from the player, and if they can't afford it the anvil operation won't be permitted.
 
 Below is a list of the changes this mod makes, along with some of the reasoning behind them.
 
