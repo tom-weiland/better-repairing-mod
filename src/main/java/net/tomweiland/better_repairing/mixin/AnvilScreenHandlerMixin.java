@@ -58,7 +58,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		this.keepSecondSlot = false;
 		this.levelCost.set(1);
 		int cost = 0; // Formerly: i
-		int renameCost = 0;
+		boolean isRenaming = false;
 		int totalNewEnchantLvls = 0;
 
 		if (!itemInput1.isEmpty() && EnchantmentHelper.canHaveEnchantments(itemInput1)) {
@@ -186,30 +186,18 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
 			if (this.newItemName != null && !StringHelper.isBlank(this.newItemName)) {
 				if (!this.newItemName.equals(itemInput1.getName().getString())) {
-					renameCost = 1;
-					cost += renameCost;
+					isRenaming = true;
+					cost += 1;
 					itemOutput.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
 				}
 			} else if (itemInput1.contains(DataComponentTypes.CUSTOM_NAME)) {
-				renameCost = 1;
-				cost += renameCost;
+				isRenaming = true;
+				cost += 1;
 				itemOutput.remove(DataComponentTypes.CUSTOM_NAME);
 			}
-			
-			this.levelCost.set(cost <= 0 ? 0 : cost);
-			if (cost <= 0) {
-				itemOutput = ItemStack.EMPTY;
-			}
 
-			if (renameCost == cost && renameCost > 0) {
-				if (this.levelCost.get() >= 40) {
-					this.levelCost.set(39);
-				}
-
-				this.keepSecondSlot = true;
-			}
-
-			if (!itemOutput.isEmpty()) {
+			if (cost > 0 && !(isRenaming && cost == 1)) {
+				// Don't apply the enchant level tax if all we're doing is renaming the item
 				EnchantmentHelper.set(itemOutput, builder.build());
 				int totalEnchants = EnchantmentHelper.getEnchantments(itemOutput).getEnchantments().size();
 				int enchantLvlTax = totalEnchants + totalNewEnchantLvls; // Pay per enchant, but only per enchant level for newly added enchants
@@ -225,11 +213,13 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					// Only applies to curse of vanishing when not in hardcore mode
 					enchantLvlTax = 0;
 				}
-				
-				this.levelCost.set(cost + enchantLvlTax);
+
+				cost += enchantLvlTax;
 			}
 
-			this.output.setStack(0, itemOutput);
+			cost = Math.max(cost, 0);
+			this.output.setStack(0, cost > 0 ? itemOutput : ItemStack.EMPTY);
+			this.levelCost.set(cost);
 			this.sendContentUpdates();
 		} else {
 			this.output.setStack(0, ItemStack.EMPTY);
