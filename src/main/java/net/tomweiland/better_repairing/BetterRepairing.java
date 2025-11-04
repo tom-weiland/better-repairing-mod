@@ -2,11 +2,10 @@ package net.tomweiland.better_repairing;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,11 +28,7 @@ public class BetterRepairing implements ModInitializer {
 		return isArmor && stack.hasEnchantment(Enchantments.MENDING);
 	}
 
-	public static boolean isHardcore(PlayerEntity player) {
-		MinecraftServer server = player.getServer();
-		if (server != null) {
-			return server.isHardcore();
-		}
-		return player.getWorld().getLevelProperties().isHardcore();
+	public static boolean isHardcore(World world) {
+		return world.getLevelProperties().isHardcore();
 	}
 }

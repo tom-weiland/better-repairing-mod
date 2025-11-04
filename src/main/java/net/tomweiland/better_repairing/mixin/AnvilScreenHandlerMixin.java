@@ -208,7 +208,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					enchantLvlTax += totalEnchants;
 				}
 				
-				if (itemOutput.hasEnchantment(Enchantments.BINDING_CURSE) || (!BetterRepairing.isHardcore(this.player) && itemOutput.hasEnchantment(Enchantments.VANISHING_CURSE))) {
+				if (itemOutput.hasEnchantment(Enchantments.BINDING_CURSE) || (!BetterRepairing.isHardcore(this.player.getEntityWorld()) && itemOutput.hasEnchantment(Enchantments.VANISHING_CURSE))) {
 					// Give curses an upside/positive effect so that there's a tradeoff and an interesting decision to be made
 					// Only applies to curse of vanishing when not in hardcore mode
 					enchantLvlTax = 0;
