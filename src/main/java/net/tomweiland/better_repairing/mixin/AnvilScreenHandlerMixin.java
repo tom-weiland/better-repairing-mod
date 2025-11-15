@@ -30,8 +30,8 @@ import net.tomweiland.better_repairing.BetterRepairing;
 @Mixin(AnvilScreenHandler.class)
 public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
-	private static final int baseRepairCost = 2;
-	private static final int baseEnchantCost = 3;
+	private static final int baseEnchantCost = 5;
+	private static final int renameCost = 1;
 
     @Shadow
     private Property levelCost;
@@ -59,7 +59,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		this.levelCost.set(1);
 		int cost = 0; // Formerly: i
 		boolean isRenaming = false;
-		int totalNewEnchantLvls = 0;
+		boolean isModifying = false;
+		int newEnchantCost = 0;
 
 		if (!itemInput1.isEmpty() && EnchantmentHelper.canHaveEnchantments(itemInput1)) {
 			ItemStack itemOutput = itemInput1.copy(); // Formerly: itemStack2
@@ -69,21 +70,21 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			this.repairItemUsage = 0;
 			
 			if (!itemInput2.isEmpty()) {
-				boolean item2HasEnchants = itemInput2.contains(DataComponentTypes.STORED_ENCHANTMENTS); // Formerly: bl
+				boolean item2IsEnchantedBook = itemInput2.contains(DataComponentTypes.STORED_ENCHANTMENTS); // Formerly: bl
 				
 				boolean item1IsNetherite = itemInput1.canRepairWith(new ItemStack(Items.NETHERITE_INGOT));
 				boolean item2IsDiamond = itemInput2.isOf(Items.DIAMOND);
 				boolean isRepairingNetheriteWithDiamond = item1IsNetherite && item1HasMending && item2IsDiamond; // Allow netherite items with mending to be repaired with diamonds
 
 				if (itemOutput.isDamageable() && (itemInput1.canRepairWith(itemInput2) || isRepairingNetheriteWithDiamond)) {
-					int numRepairsForMaxDmg = 4;
+					int numRepairsForMaxDmg = 3;
 					boolean item2IsNetherite = itemInput2.isOf(Items.NETHERITE_INGOT);
 					if (item2IsNetherite) {
 						numRepairsForMaxDmg = 1; // Only require 1 netherite ingot to fully repair a netherite tool
-					} else if (item1HasMending && !isRepairingNetheriteWithDiamond) {
-						numRepairsForMaxDmg = 2; // Mending resource discount doesn't apply when using diamonds to repair netherite gear
+					} else if (item1HasMending) {
+						numRepairsForMaxDmg = 2;
 					}
-					int maxDmgRepair = itemOutput.getMaxDamage() / numRepairsForMaxDmg;
+					int maxDmgRepair = itemOutput.getMaxDamage() / numRepairsForMaxDmg + 1;
 					int dmgRepair = Math.min(itemOutput.getDamage(), maxDmgRepair); // Formerly: k
 					if (dmgRepair <= 0) {
 						this.output.setStack(0, ItemStack.EMPTY);
@@ -93,27 +94,28 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 					}
 
 					int repairItemsUsed; // Formerly: m
-					int unitRepairCost = baseRepairCost;
+					int unitRepairCost = 0;
 					if (isRepairingNetheriteWithDiamond) {
-						unitRepairCost += 2; // Charge more levels for repairing netherite gear with diamonds
+						unitRepairCost += 1; // Charge more levels for repairing netherite gear with diamonds
 					}
 					for (repairItemsUsed = 0; dmgRepair > 0 && repairItemsUsed < itemInput2.getCount(); repairItemsUsed++) {
 						int n = itemOutput.getDamage() - dmgRepair;
 						itemOutput.setDamage(n);
 						cost += unitRepairCost;
 						dmgRepair = Math.min(itemOutput.getDamage(), maxDmgRepair);
+						isModifying = true;
 					}
 
 					this.repairItemUsage = repairItemsUsed;
 				} else {
-					if (!item2HasEnchants && (!itemOutput.isOf(itemInput2.getItem()) || !itemOutput.isDamageable())) {
+					if (!item2IsEnchantedBook && (!itemOutput.isOf(itemInput2.getItem()) || !itemOutput.isDamageable())) {
 						this.output.setStack(0, ItemStack.EMPTY);
 						this.levelCost.set(0);
 						ci.cancel();
 						return;
 					}
 
-					if (itemOutput.isDamageable() && !item2HasEnchants) {
+					if (itemOutput.isDamageable() && !item2IsEnchantedBook) {
 						int item1RemainDur = itemInput1.getMaxDamage() - itemInput1.getDamage(); // Formerly: kx
 						int item2RemainDur = itemInput2.getMaxDamage() - itemInput2.getDamage(); // Formerly: m
 						int n = item2RemainDur + itemOutput.getMaxDamage() * 12 / 100;
@@ -125,7 +127,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
 						if (itemOutputDmg < itemOutput.getDamage()) {
 							itemOutput.setDamage(itemOutputDmg);
-							cost += baseRepairCost + 2;
+							cost += 5;
+							isModifying = true;
 						}
 					}
 
@@ -159,7 +162,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 						
 						if (!isAcceptableEnchant) {
 							hasUnacceptableEnchant = true;
-							cost++;
+							newEnchantCost += 2; // Incompatible enchants penalty
 						} else {
 							hasAcceptableEnchant = true;
 							if (item2EnchantLvl > enchantment.getMaxLevel()) {
@@ -167,7 +170,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 							}
 
 							builder.set(item2Enchant, item2EnchantLvl);
-							totalNewEnchantLvls += item2EnchantLvl;
+							newEnchantCost++;
 						}
 					}
 					
@@ -180,32 +183,29 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 				}
 			}
 
-			if (totalNewEnchantLvls > 0) {
+			if (newEnchantCost > 0) {
 				cost += baseEnchantCost;
+				isModifying = true;
 			}
 
 			if (this.newItemName != null && !StringHelper.isBlank(this.newItemName)) {
 				if (!this.newItemName.equals(itemInput1.getName().getString())) {
 					isRenaming = true;
-					cost += 1;
+					cost += renameCost;
 					itemOutput.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
 				}
 			} else if (itemInput1.contains(DataComponentTypes.CUSTOM_NAME)) {
 				isRenaming = true;
-				cost += 1;
+				cost += renameCost;
 				itemOutput.remove(DataComponentTypes.CUSTOM_NAME);
 			}
 
-			if (cost > 0 && !(isRenaming && cost == 1)) {
-				// Don't apply the enchant level tax if all we're doing is renaming the item
+			if (isModifying) {
+				// Enchant level tax only applies when modifying the item OTHER than renaming
 				EnchantmentHelper.set(itemOutput, builder.build());
-				int totalEnchants = EnchantmentHelper.getEnchantments(itemOutput).getEnchantments().size();
-				int enchantLvlTax = totalEnchants + totalNewEnchantLvls; // Pay per enchant, but only per enchant level for newly added enchants
+				int enchantLvlTax = EnchantmentHelper.getEnchantments(itemOutput).getEnchantments().size();
 				if (this.repairItemUsage > 0) {
 					enchantLvlTax *= this.repairItemUsage;
-				} else {
-					// Give more weight to the number of enchantments when not repairing
-					enchantLvlTax += totalEnchants;
 				}
 				
 				if (itemOutput.hasEnchantment(Enchantments.BINDING_CURSE) || (!BetterRepairing.isHardcore(this.player.getEntityWorld()) && itemOutput.hasEnchantment(Enchantments.VANISHING_CURSE))) {
@@ -218,7 +218,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			}
 
 			cost = Math.max(cost, 0);
-			this.output.setStack(0, cost > 0 ? itemOutput : ItemStack.EMPTY);
+			this.output.setStack(0, (isRenaming || isModifying) ? itemOutput : ItemStack.EMPTY);
 			this.levelCost.set(cost);
 			this.sendContentUpdates();
 		} else {

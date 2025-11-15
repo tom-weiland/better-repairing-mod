@@ -18,7 +18,7 @@ You invest too heavily in acquiring your fully enchanted gear for the game to ju
 
 Instead, the number of enchantments an item has will affect how many xp levels it takes to repair it. This way the repair cost remains fixed and in your control, which could make for some interesting decisions about whether that extra enchantment is really necessary—maybe you'd rather not have Fortune III on your primary digging pickaxe to save yourself some levels when repairing it 🤔
 
-### 3. Cost of combining enchanted items is now based on the total number of enchantments on the item and the number of new enchantment levels being added.
+### 3. Cost of combining enchanted items is now based on the total number of enchantments on the resulting item.
 
 This is easier to understand than Minecraft's default "prior work penalty" system, and also means you don't need to consult the wiki, a flow chart, or an external tool to determine the cheapest way of getting all your enchantments onto an item.
 
@@ -50,7 +50,7 @@ Maybe now you'll arrive at that end city and actually have a use for the Mending
 
 ### 3. Netherite gear with Mending on it can be repaired using diamonds.
 
-At the netherite tier, the resource discount that Mending provides changes—instead of reducing the number of materials needed to fully repair the item (since a single netherite ingot will do that anyways), it allows you to use diamonds for the repair instead of netherite ingots. This does cost more levels per repair than usual, but provides an alternative option to mining for more ancient debris. I personally find caving in the overworld much more interesting and enjoyable than blowing up beds at the bottom of the nether over and over again.
+At the netherite tier, the resource discount that Mending provides changes—since a single netherite ingot will fully repair the item anyways, it allows you to use diamonds for the repair instead of netherite ingots. This does cost an extra level per repair than usual, but provides an alternative option to mining for more ancient debris. I personally find caving in the overworld much more interesting and enjoyable than blowing up beds at the bottom of the nether over and over again.
 
 ### 4. Armor with Mending won't break when its durability reaches 0.
 
