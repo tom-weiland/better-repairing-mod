@@ -1,11 +1,11 @@
 package net.tomweiland.better_repairing;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +20,15 @@ public class BetterRepairing implements ModInitializer {
 	}
 
 	public static Identifier getId(String name) {
-		return Identifier.of(MOD_ID, name);
+		return Identifier.fromNamespaceAndPath(MOD_ID, name);
 	}
 
 	public static boolean isMendingArmor(ItemStack stack) {
-		boolean isArmor = stack.isIn(ItemTags.HEAD_ARMOR) || stack.isIn(ItemTags.CHEST_ARMOR) || stack.isIn(ItemTags.LEG_ARMOR) || stack.isIn(ItemTags.FOOT_ARMOR);
+		boolean isArmor = stack.is(ItemTags.HEAD_ARMOR) || stack.is(ItemTags.CHEST_ARMOR) || stack.is(ItemTags.LEG_ARMOR) || stack.is(ItemTags.FOOT_ARMOR);
 		return isArmor && stack.hasEnchantment(Enchantments.MENDING);
 	}
 
-	public static boolean isHardcore(World world) {
-		return world.getLevelProperties().isHardcore();
+	public static boolean isHardcore(Level world) {
+		return world.getLevelData().isHardcore();
 	}
 }

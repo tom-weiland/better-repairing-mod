@@ -29,14 +29,14 @@
 		"better_repairing.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.5",
-		"java": ">=21",
+		"fabricloader": ">=0.19.3",
+		"minecraft": ">=26.2",
+		"java": ">=25",
 		"fabric-api": "*"
 	},
 	"custom": {
 		"loom:injected_interfaces": {
-			"net/minecraft/item/ItemStack": ["net/tomweiland/better_repairing/ItemStackExtensions"]
+			"net/minecraft/world/item/ItemStack": ["net/tomweiland/better_repairing/ItemStackExtensions"]
 		}
 	}
 }

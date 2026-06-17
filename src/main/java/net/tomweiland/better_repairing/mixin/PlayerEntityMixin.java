@@ -7,13 +7,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.gamerules.GameRules;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.GameRules;
-
-@Mixin(PlayerEntity.class)
+@Mixin(Player.class)
 public abstract class PlayerEntityMixin {
     private static final int DEFAULT_LVL_30_XP = 1395; // Total xp needed to reach level 30 in default Minecraft
     private static final int XP_PER_LVL = Math.ceilDiv(DEFAULT_LVL_30_XP, 30);
@@ -21,20 +19,20 @@ public abstract class PlayerEntityMixin {
     @Shadow
     public int experienceLevel;
 
-    @Inject(method = "getNextLevelExperience", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getXpNeededForNextLevel", at = @At("HEAD"), cancellable = true)
     private void onGetNextLevelExperience(CallbackInfoReturnable<Integer> cir) {
         // Make xp required to reach the next level constant
         cir.setReturnValue(XP_PER_LVL);
     }
 
-    @Inject(method = "dropInventory", at = @At("HEAD"))
-    private void vanishCursesOnKeepInventory(CallbackInfo ci, @Local(ordinal = 0) ServerWorld world) {
-		if (world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+    @Inject(method = "dropEquipment", at = @At("HEAD"))
+    private void vanishCursesOnKeepInventory(ServerLevel world, CallbackInfo ci) {
+		if (world.getGameRules().get(GameRules.KEEP_INVENTORY)) {
             // Make items with curse of vanishing vanish even when keepInventory is on
-            this.vanishCursedItems();
+            this.destroyVanishingCursedItems();
         }
 	}
 
     @Shadow
-    protected abstract void vanishCursedItems();
+    protected abstract void destroyVanishingCursedItems();
 }
