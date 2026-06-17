@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 
@@ -13,6 +14,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
@@ -46,6 +48,13 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 		super(MenuType.ANVIL, syncId, inventory, context, null);
 		this.addDataSlot(this.cost);
 	}
+
+    @Inject(method = "mayPickup", at = @At("HEAD"), cancellable = true)
+    private void allowFreeOutputPickup(Player player, boolean hasItem, CallbackInfoReturnable<Boolean> cir) {
+        // Vanilla refuses to let the player take the output when the level cost is 0. Since this mod intentionally
+		// makes some operations (like repairing an unenchanted tool) free, we need to drop the "cost > 0" requirement
+        cir.setReturnValue(player.hasInfiniteMaterials() || player.experienceLevel >= this.cost.get());
+    }
 
     @Inject(method = "createResult", at = @At("HEAD"), cancellable = true)
     private void onUpdateResult(CallbackInfo ci) {

@@ -72,7 +72,7 @@ Yes, this means enchanting multiple items is cheaper than before (as long as you
 
 ### 1. Cursed items are exempt from the enchantment level tax.
 
-The level cost for repairing or combining an item scales with how many enchantments it has (the "enchantment level tax"), but items with Curse of Vanishing and/or Curse of Binding on them are exempt from this increase. This means that instead of always jsut avoiding cursed items when possible, you might decide that the xp discount is worth the risk/inconvenience.
+The level cost for repairing or combining an item scales with how many enchantments it has (the "enchantment level tax"), but items with Curse of Vanishing and/or Curse of Binding on them are exempt from this increase. This means that instead of always just avoiding cursed items when possible, you might decide that the xp discount is worth the risk/inconvenience.
 
 However, in Hardcore mode this exemption only applies to Curse of Binding, as Curse of Vanishing has no downside there (since dying means you can't keep playing on the world anymore anyways).
 
