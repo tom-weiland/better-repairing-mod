@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 
+import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -84,12 +86,22 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 
 				if (itemOutput.isDamageableItem() && (itemInput1.isValidRepairItem(itemInput2) || isRepairingNetheriteWithDiamond)) {
 					int numRepairsForMaxDmg = 3;
+					int unitRepairCost = 0;
 					boolean item2IsNetherite = itemInput2.is(Items.NETHERITE_INGOT);
 					if (item2IsNetherite) {
 						numRepairsForMaxDmg = 1; // Only require 1 netherite ingot to fully repair a netherite tool
 					} else if (item1HasMending) {
 						numRepairsForMaxDmg = 2;
 					}
+
+					if (itemOutput.is(Items.ELYTRA)) {
+						// Make repairing elytra more expensive.
+						// Works great with Better Transportation's elytra nerf which makes mending passively recharge elytra
+						// durability when not flying and turns phantom membrane repairing into more of an emergency backup option
+						numRepairsForMaxDmg = item1HasMending ? 5 : 7;
+						unitRepairCost = 2;
+					}
+
 					int maxDmgRepair = itemOutput.getMaxDamage() / numRepairsForMaxDmg + 1;
 					int dmgRepair = Math.min(itemOutput.getDamageValue(), maxDmgRepair); // Formerly: k
 					if (dmgRepair <= 0) {
@@ -100,7 +112,6 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 					}
 
 					int repairItemsUsed; // Formerly: m
-					int unitRepairCost = 0;
 					if (isRepairingNetheriteWithDiamond) {
 						unitRepairCost += 1; // Charge more levels for repairing netherite gear with diamonds
 					}
