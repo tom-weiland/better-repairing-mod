@@ -84,6 +84,10 @@ Curse of Binding prevents you from unequipping an item, and now that Mending pre
 
 In vanilla Minecraft, enabling the keepInventory game rule prevents you from dropping your items on death, including those with Curse of Vanishing on them. This doesn't make any sense, and would provide the enchantment level tax exemption without any risk.
 
+### 4. Curse of Vanishing items no longer disappear when an armor stand they're equipped on is broken.
+
+Curse of Vanishing items disappearing when you put them on an armor stand and then that armor stand is broken is simply annoying. Also, why does Curse of Vanishing logic apply to armor stands (when it's broken/"killed", the item disappears) but Curse of Binding logic does *not* (the item can be taken off the armor stand normally)?
+
 # Check Out My Other Mods!
 
 **[Better Repairing](https://github.com/tom-weiland/better-repairing-mod):** Reworks the anvil repair system, Mending enchantment, and more to fix their flaws.<br>
