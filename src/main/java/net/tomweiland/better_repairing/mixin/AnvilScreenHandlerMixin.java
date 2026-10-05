@@ -9,8 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 
-import net.fabricmc.loader.api.FabricLoader;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
