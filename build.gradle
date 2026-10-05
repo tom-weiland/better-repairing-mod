@@ -18,6 +18,15 @@ repositories {
 	// for more information about repositories.
 }
 
+loom {
+	runs {
+		configureEach {
+			// Matches the vanilla 26.3+ launcher. Without it, native shader compilation can crash the JVM during startup
+			vmArg "-XX:StackShadowPages=32"
+		}
+	}
+}
+
 fabricApi {
 	configureDataGeneration {
 		client = true
